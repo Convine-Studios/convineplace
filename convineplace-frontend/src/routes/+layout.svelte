@@ -2,4 +2,6 @@
   import "../app.css";
 </script>
 
-<slot><!-- optional fallback --></slot>
+<div class="grid h-screen place-items-center">
+  <slot><!-- optional fallback --></slot>
+</div>

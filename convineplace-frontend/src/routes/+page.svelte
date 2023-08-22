@@ -2,13 +2,29 @@
   import Pixel from "$lib/pixel.svelte";
   let canvas = [];
 
+  let colors = [
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "blue",
+    "indigo",
+    "violet",
+    "black",
+    "white",
+  ];
+
   function populateCanvas() {
     for (let i = 0; i < 100; i++) {
-      canvas.push("green");
+      canvas.push(getRandomColor());
     }
     console.log(canvas);
   }
   populateCanvas();
+
+  function getRandomColor() {
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
 </script>
 
 Place
@@ -23,6 +39,9 @@ Place
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
-    width: 200px;
+    width: fit-content;
+    border: solid 3px black;
+    padding: 5px;
+    margin: 1rem;
   }
 </style>
