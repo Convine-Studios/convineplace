@@ -6,8 +6,11 @@
   "author": "quabey <50772988+quabey@users.noreply.github.com>",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "start": "cd convineplace-frontend && npm run dev"
+  },
   "workspaces": [
-    "frontend",
+    "convineplace-frontend",
     "backend"
   ],
   "devDependencies": {}
