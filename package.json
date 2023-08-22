@@ -1,0 +1,14 @@
+{
+  "name": "convineplace",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Convine-Studios/convineplace.git",
+  "author": "quabey <50772988+quabey@users.noreply.github.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "devDependencies": {}
+}
