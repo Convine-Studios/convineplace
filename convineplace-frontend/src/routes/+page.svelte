@@ -2,7 +2,7 @@
   import Pixel from "$lib/pixel.svelte";
   import Selector from "$lib/selector.svelte";
   let canvas = [];
-  let selected = "blue";
+  let selected = "#ff4500";
   let room;
 
   import * as Colyseus from "colyseus.js";
@@ -29,20 +29,27 @@
   }
 
   const colors = [
-    "red",
-    "orange",
-    "yellow",
-    "green",
-    "blue",
-    "indigo",
-    "violet",
-    "black",
-    "white",
+    "#ff4500",
+    "#ffa800",
+    "#ffd635",
+    "#00a368",
+    "#7eed56",
+    "#2450a4",
+    "#3690ea",
+    "#51e9f4",
+    "#811e9f",
+    "#b44ac0",
+    "#ff99aa",
+    "#9c6926",
+    "#000000",
+    "#898d90",
+    "#d4d7d9",
+    "#ffffff"
   ];
 
   function populateCanvas() {
     for (let i = 0; i < 100; i++) {
-      canvas.push(getRandomColor());
+      canvas.push("white");
     }
     console.log(canvas);
   }
