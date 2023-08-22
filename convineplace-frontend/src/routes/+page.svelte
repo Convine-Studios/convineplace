@@ -1,6 +1,7 @@
 <script>
   import Pixel from "$lib/pixel.svelte";
   import Selector from "$lib/selector.svelte";
+
   let canvas = [];
   let selected = "blue";
   let room;
