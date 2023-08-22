@@ -15,7 +15,6 @@ export class room extends Room {
     this.onMessage("pixel", (client, message) => {
       console.log("game received message from", client.sessionId, ":", message);
       this.broadcast("pixel", message);
-      client.send("pixel", message);
     });
   }
 
