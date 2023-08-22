@@ -12,20 +12,17 @@
 </script>
 
 Place
-{#each canvas as pixel}
-  <div class="grid">
+<div class="grid">
+  {#each canvas as pixel}
     <Pixel color={pixel} />
-  </div>
-{/each}
+  {/each}
+</div>
 
 <style>
   .grid {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
-    gap: 0p;
-    position: absolute;
-    top: 10px;
-    left: 10px;
+    width: 200px;
   }
 </style>

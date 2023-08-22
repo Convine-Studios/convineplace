@@ -6,7 +6,7 @@
 
 <style>
   .pixel {
-    width: 10px;
-    height: 10px;
+    width: 20px;
+    height: 20px;
   }
 </style>
