@@ -2,6 +2,6 @@
   import "../app.css";
 </script>
 
-<div class="grid h-screen place-items-center">
+<div class="flex flex-row">
   <slot><!-- optional fallback --></slot>
 </div>

@@ -17,7 +17,7 @@
     "#000000",
     "#898d90",
     "#d4d7d9",
-    "#ffffff"
+    "#ffffff",
   ];
 </script>
 
@@ -43,12 +43,11 @@
     height: 40px;
     padding: 0rem;
     margin: 0.34rem;
-    
   }
   .grid {
     display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(8, 1fr);
     width: fit-content;
     border: solid 3px black;
     padding: 1px;

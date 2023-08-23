@@ -11,8 +11,7 @@
     "backend": "cd backend && npm run start"
   },
   "workspaces": [
-    "convineplace-frontend",
-    "backend"
+    "convineplace-frontend"
   ],
   "devDependencies": {}
 }

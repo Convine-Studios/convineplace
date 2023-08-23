@@ -3,15 +3,12 @@
   import Selector from "$lib/selector.svelte";
   import { createClient } from "@supabase/supabase-js";
 
-
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-  let canvas = [];
   let selected = "#ff4500";
 
-
-  let canvas = Array(100).fill("white");
+  let canvas = Array(2500).fill("white");
 
   const supabase = createClient(supabaseUrl, supabaseAnonKey);
   const channel = supabase.channel("room-1");
@@ -50,7 +47,7 @@
     "#000000",
     "#898d90",
     "#d4d7d9",
-    "#ffffff"
+    "#ffffff",
   ];
 
   function assignColor(id) {
@@ -68,26 +65,32 @@
 </script>
 
 Place
-<div class="grid">
-  {#each canvas as pixel, id}
-    <button on:click={() => assignColor(id)}>
-      <Pixel color={pixel} />
-    </button>
-  {/each}
-</div>
+<div class="container">
+  <div class="grid">
+    {#each canvas as pixel, id}
+      <button on:click={() => assignColor(id)}>
+        <Pixel color={pixel} />
+      </button>
+    {/each}
+  </div>
 
-<div class="">
-  <Selector bind:selected />
+  <div class="">
+    <Selector bind:selected />
+  </div>
 </div>
 
 <style>
   .grid {
     display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    grid-template-rows: repeat(10, 1fr);
+    grid-template-columns: repeat(50, 1fr);
+    grid-template-rows: repeat(50, 1fr);
     width: fit-content;
     border: solid 3px black;
     padding: 5px;
     margin: 1rem;
+  }
+  .container {
+    display: flex;
+    flex-direction: row;
   }
 </style>
