@@ -1,21 +1,64 @@
 <script>
-	import { Button, Modal } from 'flowbite-svelte';
+	import { Button, Modal, Tabs, TabItem } from 'flowbite-svelte';
+	import { Icon } from 'flowbite-svelte-icons';
+
 	let devModal = false;
 </script>
 
 <Button on:click={() => (devModal = true)}>Admin Menu</Button>
 
-<Modal title="Terms of Service" bind:open={devModal} autoclose outsideclose>
-	<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-		With less than a month to go before the European Union enacts new consumer privacy laws for its
-		citizens, companies around the world are updating their terms of service agreements to comply.
-	</p>
-	<p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-		The European Union’s General Data Protection Regulation (G.D.P.R.) goes into effect on May 25
-		and is meant to ensure a common set of data rights in the European Union. It requires
-		organizations to notify users as soon as possible of high-risk data breaches that could
-		personally affect them.
-	</p>
+<Modal bind:open={devModal} outsideclose>
+	<script>
+		import { Tabs, TabItem } from 'flowbite-svelte';
+		import { Icon } from 'flowbite-svelte-icons';
+	</script>
+
+	<Tabs style="underline">
+		<TabItem open>
+			<div slot="title" class="flex items-center gap-2">
+				<Icon name="user-circle-solid" size="sm" />
+				Profile
+			</div>
+			<p class="text-sm text-gray-500 dark:text-gray-400">
+				<b>Profile:</b>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+				labore et dolore magna aliqua.
+			</p>
+		</TabItem>
+		<TabItem>
+			<div slot="title" class="flex items-center gap-2">
+				<Icon name="grid-solid" size="sm" />
+				Dashboard
+			</div>
+			<p class="text-sm text-gray-500 dark:text-gray-400">
+				<b>Dashboard:</b>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+				labore et dolore magna aliqua.
+			</p>
+		</TabItem>
+		<TabItem>
+			<div slot="title" class="flex items-center gap-2">
+				<Icon name="adjustments-vertical-solid" size="sm" />
+				Settings
+			</div>
+			<p class="text-sm text-gray-500 dark:text-gray-400">
+				<b>Settings:</b>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+				labore et dolore magna aliqua.
+			</p>
+		</TabItem>
+		<TabItem>
+			<div slot="title" class="flex items-center gap-2">
+				<Icon name="clipboard-solid" size="sm" />
+				Contacts
+			</div>
+			<p class="text-sm text-gray-500 dark:text-gray-400">
+				<b>Contacts:</b>
+				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+				labore et dolore magna aliqua.
+			</p>
+		</TabItem>
+	</Tabs>
 	<svelte:fragment slot="footer">
 		<Button on:click={() => alert('Handle "success"')}>I accept</Button>
 		<Button color="alternative">Decline</Button>
