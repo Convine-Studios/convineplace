@@ -3,11 +3,15 @@
   import Selector from "$lib/selector.svelte";
   import { createClient } from "@supabase/supabase-js";
 
+
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+  let canvas = [];
+  let selected = "#ff4500";
+
+
   let canvas = Array(100).fill("white");
-  let selected = "blue";
 
   const supabase = createClient(supabaseUrl, supabaseAnonKey);
   const channel = supabase.channel("room-1");
@@ -29,6 +33,25 @@
       }
     })
     .subscribe();
+
+  const colors = [
+    "#ff4500",
+    "#ffa800",
+    "#ffd635",
+    "#00a368",
+    "#7eed56",
+    "#2450a4",
+    "#3690ea",
+    "#51e9f4",
+    "#811e9f",
+    "#b44ac0",
+    "#ff99aa",
+    "#9c6926",
+    "#000000",
+    "#898d90",
+    "#d4d7d9",
+    "#ffffff"
+  ];
 
   function assignColor(id) {
     channel.send({
