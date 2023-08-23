@@ -35,7 +35,7 @@
 
 <style>
   .border {
-    border: solid 3px black;
+    scale: 1.3;
   }
 
   .color {
