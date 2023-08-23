@@ -1,33 +1,38 @@
 <script>
   import Pixel from "$lib/pixel.svelte";
   import Selector from "$lib/selector.svelte";
+  import { createClient } from "@supabase/supabase-js";
+
+
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
   let canvas = [];
   let selected = "#ff4500";
-  let room;
 
-  import * as Colyseus from "colyseus.js";
-  import { onMount } from "svelte";
 
-  var client = new Colyseus.Client("ws://localhost:2567");
+  let canvas = Array(100).fill("white");
 
-  client
-    .joinOrCreate("room")
-    .then((roomObj) => {
-      room = roomObj;
-      console.log(room.sessionId, "joined", room.name);
-      listenToMessage();
+  const supabase = createClient(supabaseUrl, supabaseAnonKey);
+  const channel = supabase.channel("room-1");
+
+  channel
+    .on("broadcast", { event: "pixel" }, (payload) => {
+      console.log("Received payload", payload);
+      if (
+        payload &&
+        payload.payload.id !== undefined &&
+        payload.payload.selected !== undefined
+      ) {
+        console.log(
+          "Received color",
+          payload.payload.id,
+          payload.payload.selected
+        );
+        canvas[payload.payload.id] = payload.payload.selected;
+      }
     })
-    .catch((e) => {
-      console.log("JOIN ERROR", e);
-    });
-
-  function listenToMessage() {
-    room.onMessage("pixel", ({ id, selected }) => {
-      console.log("Received color", id, selected);
-      canvas[id] = selected;
-    });
-  }
+    .subscribe();
 
   const colors = [
     "#ff4500",
@@ -48,20 +53,15 @@
     "#ffffff"
   ];
 
-  function populateCanvas() {
-    for (let i = 0; i < 100; i++) {
-      canvas.push("white");
-    }
-    console.log(canvas);
-  }
-  populateCanvas();
-
-  function getRandomColor() {
-    return colors[Math.floor(Math.random() * colors.length)];
-  }
-
   function assignColor(id) {
-    room.send("pixel", { id, selected });
+    channel.send({
+      type: "broadcast",
+      event: "pixel",
+      payload: {
+        id,
+        selected,
+      },
+    });
     console.log("Setting color", id, selected);
     canvas[id] = selected;
   }
