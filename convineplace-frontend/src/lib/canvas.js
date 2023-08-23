@@ -1,5 +1,6 @@
 import { supabase } from '$lib/supabase.js';
 import { canvas as canvasStore } from '$lib/states.js';
+import { loading } from '$lib/states.js';
 
 export const canvasFunction = () => {
 
@@ -17,6 +18,7 @@ export const canvasFunction = () => {
 			newCanvas[pixel.id] = pixel.color;
 		});
 		canvasStore.set(newCanvas);
+        loading.set(false);
 	};
 
     const subscribeToCanvasChanges = () => {
