@@ -33,9 +33,21 @@ export const canvasFunction = () => {
 		.subscribe();
     };
 
-	
+	const updatePixel = async (id, color) => {
+		try {
+			const { data, error } = await supabase
+			.from('pixels')
+			.update({ color: color })
+			.eq('id', id);
+		} catch (error) {
+			console.log(error);
+		}
+		
+	};
+
     return {
         loadCanvas,
-        subscribeToCanvasChanges
+        subscribeToCanvasChanges,
+		updatePixel
     };
 };

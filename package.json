@@ -8,10 +8,11 @@
   "private": true,
   "scripts": {
     "start": "cd convineplace-frontend && npm run dev",
-    "backend": "cd backend && npm run start"
+    "backend": "cd backend && cargo run"
   },
   "workspaces": [
-    "convineplace-frontend"
+    "convineplace-frontend",
+    "backend"
   ],
   "devDependencies": {}
 }

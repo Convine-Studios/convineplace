@@ -4,7 +4,7 @@
 	import { supabase } from '$lib/supabase.js';
 	import { canvasFunction } from '$lib/canvas.js';
 
-	const { loadCanvas, subscribeToCanvasChanges } = canvasFunction();
+	const { loadCanvas, subscribeToCanvasChanges, updatePixel } = canvasFunction();
 
 	let canvasElement;
 
@@ -26,10 +26,7 @@
 		const y = Math.floor((event.clientY - rect.top) / 20);
 		const id = y * 50 + x;
 
-		const { data, error } = await supabase
-			.from('pixels')
-			.update({ color: $selectedColor })
-			.eq('id', id);
+		updatePixel(id, $selectedColor);
 
 		if (error) {
 			console.error('Error updating pixel', error);
