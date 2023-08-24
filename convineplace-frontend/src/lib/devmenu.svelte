@@ -2,6 +2,7 @@
 	import { Button, Modal, Tabs, TabItem } from 'flowbite-svelte';
 	import { Icon } from 'flowbite-svelte-icons';
 	import { websocket } from '$lib/websocket.js';
+	import { colors } from '$lib/states.js';
 
 	const { initWebSocket, sendMessage } = websocket();
 
@@ -68,6 +69,15 @@
 			<p class="text-sm text-gray-500 dark:text-gray-400">
 				<b>Pixels placed: </b>
 			</p>
+		</TabItem>
+		<TabItem>
+			<div slot="title" class="flex items-center gap-2">
+				<Icon name="clipboard-solid" size="sm" />
+				Colors
+			</div>
+			<div class="">
+
+			</div>
 		</TabItem>
 	</Tabs>
 </Modal>
