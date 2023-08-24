@@ -1,11 +1,9 @@
-
-
 export const websocket = () => {
     let ws;
     let log = "";
 // Initialize the WebSocket connection
 const initWebSocket = () => {
-  ws = new WebSocket("ws://localhost:8080");
+  ws = new WebSocket("wss://212.227.78.96:8443");
 
   ws.addEventListener("open", (event) => {
     log += "WebSocket is open now.\n";

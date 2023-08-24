@@ -1,12 +1,15 @@
 const WebSocket = require("ws");
 
-const MAX_CONNECTIONS = 1000;
+const MAX_CONNECTIONS = 1;
 let connectedCount = 0;
 const startTime = Date.now();
 
 const connectWebSocket = () => {
   return new Promise((resolve) => {
-    const ws = new WebSocket("ws://127.0.0.1:8080");
+    const ws = new WebSocket('wss://212.227.78.96:8443', {
+  rejectUnauthorized: false
+});
+
 
     ws.on("open", () => {
       connectedCount++;
