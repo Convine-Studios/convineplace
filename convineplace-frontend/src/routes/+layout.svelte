@@ -3,6 +3,8 @@
 	import { Toaster } from 'svelte-french-toast';
 	import { loading } from '$lib/states.js';
 	import { Spinner } from 'flowbite-svelte';
+
+	src="/background.svg"
 </script>
 
 <Toaster />
@@ -25,7 +27,7 @@
 		pointer-events: none;
 		height: 100vh;
 		width: 100vw;
-		background: url(background.svg);
+		background: url(src);
 		background-size: cover;
 		color: white;
 		font-size: larger;
