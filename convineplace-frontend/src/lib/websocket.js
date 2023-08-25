@@ -3,7 +3,7 @@ export const websocket = () => {
     let log = "";
 // Initialize the WebSocket connection
 const initWebSocket = () => {
-  ws = new WebSocket('wss://212.227.78.96:8443');
+  ws = new WebSocket('wss://cplacebackend.nils.gay:8443');
 
   ws.addEventListener("open", (event) => {
     log += "WebSocket is open now.\n";
