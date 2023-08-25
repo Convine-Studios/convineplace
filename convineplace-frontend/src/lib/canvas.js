@@ -38,9 +38,10 @@ export const canvasFunction = () => {
 			const { data, error } = await supabase
 			.from('pixels')
 			.update({ color: color })
-			.eq('id', id);
+			.eq('id', id)
+			.throwOnError();
 		} catch (error) {
-			console.log(error);
+			//console.log(error);
 		}
 		
 	};

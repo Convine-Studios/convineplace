@@ -25,18 +25,11 @@
 		const x = Math.floor((event.clientX - rect.left) / 20);
 		const y = Math.floor((event.clientY - rect.top) / 20);
 		const id = y * 50 + x;
-
+		console.log("Adding color", id, $selectedColor);
+		$canvasStore[id] = $selectedColor;
 		updatePixel(id, $selectedColor);
 
-		if (error) {
-			console.error('Error updating pixel', error);
-			return;
-		}
-
-		canvasStore.update((currentCanvas) => {
-			currentCanvas[id] = selectedColor;
-			return { ...currentCanvas };
-		});
+		
 	};
 
 	afterUpdate(drawCanvas);
