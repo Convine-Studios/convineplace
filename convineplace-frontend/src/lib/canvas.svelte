@@ -1,6 +1,6 @@
 <script>
-	import { loggedIn, loading } from '$lib/states.js';
-	import { Spinner } from 'flowbite-svelte';
+	import { loggedIn, loading, toastSettings, canvasElement } from '$lib/states.js';
+	import { Spinner, Button } from 'flowbite-svelte';
 	import toast from 'svelte-french-toast';
 	import { onMount, afterUpdate } from 'svelte';
 	import { canvas as canvasStore, selectedColor } from '$lib/states.js';
@@ -8,14 +8,11 @@
 	import { canvasFunction } from '$lib/canvas.js';
 
 	const { loadCanvas, subscribeToCanvasChanges, updatePixel } = canvasFunction();
-	const { supabase } = supabaseFunction();
-
-	let canvasElement;
 
 	const drawCanvas = () => {
 		console.count('draw canvas');
-		if (!canvasElement) return 'canvas element not there';
-		const ctx = canvasElement.getContext('2d');
+		if (!$canvasElement) return 'canvas element not there';
+		const ctx = $canvasElement.getContext('2d');
 		const canvasData = $canvasStore;
 
 		for (const [id, color] of Object.entries(canvasData)) {
@@ -34,7 +31,7 @@
 			});
 			return;
 		}
-		const rect = canvasElement.getBoundingClientRect();
+		const rect = $canvasElement.getBoundingClientRect();
 		const x = Math.floor((event.clientX - rect.left) / 20);
 		const y = Math.floor((event.clientY - rect.top) / 20);
 		const id = y * 50 + x;
@@ -44,7 +41,7 @@
 	};
 
 	afterUpdate(() => {
-		if (canvasElement) drawCanvas();
+		if ($canvasElement) drawCanvas();
 	});
 	onMount(async () => {
 		await loadCanvas();
@@ -59,8 +56,9 @@
 	</div>
 {:else}
 	<canvas
+		id="canvas"
 		class="canvas"
-		bind:this={canvasElement}
+		bind:this={$canvasElement}
 		width="1000"
 		height="1000"
 		on:click={assignColor}

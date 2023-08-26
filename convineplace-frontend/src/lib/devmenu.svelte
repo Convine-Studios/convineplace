@@ -3,11 +3,16 @@
 	import { Button, Modal, Tabs, TabItem, Input } from 'flowbite-svelte';
 	import { Icon } from 'flowbite-svelte-icons';
 	import { websocket } from '$lib/websocket.js';
-	import { colors, settings, toastSettings } from '$lib/states.js';
+	import { colors, settings, toastSettings, canvasElement } from '$lib/states.js';
 	import toast from 'svelte-french-toast';
 
 	const { initWebSocket, sendMessage } = websocket();
-	const { supabase, fetchSettings } = supabaseFunction();
+	const { supabase, fetchSettings, sendCanvas } = supabaseFunction();
+
+	const handleScreenshot = () => {
+		const canvas = $canvasElement;
+		sendCanvas(canvas);
+	};
 
 	let devModal = false;
 
@@ -23,11 +28,9 @@
 				<Icon name="grid-solid" size="sm" />
 				Dashboard
 			</div>
-			<p class="text-sm text-gray-500 dark:text-gray-400 h-96">
-				<b>Dashboard:</b>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-				labore et dolore magna aliqua.
-			</p>
+			<div class="h-96">
+				<Button on:click={handleScreenshot}>Screenshot canvas</Button>
+			</div>
 		</TabItem>
 		<TabItem>
 			<div slot="title" class="flex items-center gap-2">

@@ -1,12 +1,13 @@
 import { writable }from 'svelte/store';
 
-export const user = writable(null);
+export const userStore = writable(null);
 export const canvas = writable({});
 
 export const loading = writable(true);
 export const creatingProfile = writable(false);
 
 export const selectedColor = writable('#ff4500');
+export const canvasElement = writable(null);
 
 export const loginModal = writable(false);
 export const signupModal = writable(false);

@@ -13,7 +13,9 @@ const connectWebSocket = (clientNumber) => {
 
     ws.on("open", () => {
       connectedCount++;
-      //console.log(`Client ${clientNumber} connected. Total connected: ${connectedCount}`);
+      //console.log(
+        `Client ${clientNumber} connected. Total connected: ${connectedCount}`
+      );
 
       // Send a test message from the first client
       if (connectedCount === 1) {
