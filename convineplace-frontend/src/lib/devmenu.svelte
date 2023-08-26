@@ -8,8 +8,15 @@
 
 	const { initWebSocket, sendMessage } = websocket();
 	const { supabase, fetchSettings, sendCanvas } = supabaseFunction();
+	let lastScreenshot = 0;
 
 	const handleScreenshot = () => {
+		if (Date.now() - lastScreenshot < 60000) {
+			toast.error('Please wait before sending another screenshot', toastSettings);
+			lastScreenshot = Date.now();
+			return;
+		}
+		lastScreenshot = Date.now();
 		const canvas = $canvasElement;
 		sendCanvas(canvas);
 	};
@@ -23,7 +30,7 @@
 
 <Modal bind:open={devModal} size="lg" outsideclose>
 	<Tabs style="underline">
-		<TabItem>
+		<TabItem open>
 			<div slot="title" class="flex items-center gap-2">
 				<Icon name="grid-solid" size="sm" />
 				Dashboard
@@ -39,7 +46,7 @@
 			</div>
 			<div class="h-96">User</div>
 		</TabItem>
-		<TabItem open>
+		<TabItem>
 			<div slot="title" class="flex items-center gap-2">
 				<Icon name="adjustments-vertical-solid" size="sm" />
 				Settings

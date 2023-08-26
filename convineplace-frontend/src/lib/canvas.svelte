@@ -1,9 +1,17 @@
 <script>
-	import { loggedIn, loading, toastSettings, canvasElement } from '$lib/states.js';
+	import {
+		loggedIn,
+		loading,
+		toastSettings,
+		canvasElement,
+		canvas as canvasStore,
+		selectedColor,
+		timeLastScreenshot,
+		isAdmin
+	} from '$lib/states.js';
 	import { Spinner, Button } from 'flowbite-svelte';
 	import toast from 'svelte-french-toast';
 	import { onMount, afterUpdate } from 'svelte';
-	import { canvas as canvasStore, selectedColor } from '$lib/states.js';
 	import { supabaseFunction } from '$lib/supabase.js';
 	import { canvasFunction } from '$lib/canvas.js';
 
@@ -31,6 +39,16 @@
 			});
 			return;
 		}
+
+		const since = Date.now() - $timeLastScreenshot;
+		//console.log(since);
+
+		if (since < 60000) {
+			let until = 60 - since / 1000;
+			until = Math.round(until);
+			toast.error('You can place the next pixel in ' + until, toastSettings);
+			return;
+		}
 		const rect = $canvasElement.getBoundingClientRect();
 		const x = Math.floor((event.clientX - rect.left) / 20);
 		const y = Math.floor((event.clientY - rect.top) / 20);
@@ -38,6 +56,7 @@
 		//console.log('Adding color', id, $selectedColor);
 		$canvasStore[id] = $selectedColor;
 		updatePixel(id, $selectedColor);
+		$timeLastScreenshot = Date.now();
 	};
 
 	afterUpdate(() => {

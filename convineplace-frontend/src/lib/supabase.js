@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import toast from "svelte-french-toast"; 
 
-import { loggedIn, loginModal, toastSettings, isAdmin, settings, userStore } from '$lib/states';
+import { loggedIn, loginModal, toastSettings, isAdmin, settings, userStore, timeLastScreenshot } from '$lib/states';
 import { get } from 'svelte/store';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -57,7 +57,6 @@ export const supabaseFunction = () => {
             }
             isAdmin.set(true);
             toast.success("Logged in as admin", toastSettings);
-            
             sendDiscordMessage("User " + user.profile.username + " logged in as admin.");
             return;
         }
@@ -68,6 +67,8 @@ export const supabaseFunction = () => {
 
 
     const fetchSettings = async () => {
+        toast.error("Not yet implemented", toastSettings);
+        
 		try {
 		const { data, error } = await supabase.from('settings').select('*').throwOnError();
         //console.log("settings", data);

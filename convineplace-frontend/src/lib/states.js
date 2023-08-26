@@ -14,6 +14,8 @@ export const signupModal = writable(false);
 export const profileModal = writable(false);
 export const adminModal = writable(false);
 
+export const timeLastScreenshot = writable(0);
+
 export const loggedIn = writable(false);
 export const isAdmin = writable(false);
 
