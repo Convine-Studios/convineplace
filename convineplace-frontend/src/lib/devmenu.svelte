@@ -6,7 +6,7 @@
 
 	const { initWebSocket, sendMessage } = websocket();
 
-	let devModal = true;
+	let devModal = false;
 </script>
 
 <Button on:click={() => (devModal = true)}>Admin Menu</Button>
