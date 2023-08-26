@@ -43,7 +43,7 @@
 		const since = Date.now() - $timeLastScreenshot;
 		//console.log(since);
 
-		if (since < 60000) {
+		if (!$isAdmin && since < 60000) {
 			let until = 60 - since / 1000;
 			until = Math.round(until);
 			toast.error('You can place the next pixel in ' + until, toastSettings);
