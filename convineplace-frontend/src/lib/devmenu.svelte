@@ -14,7 +14,7 @@
 	let timer = 0;
 </script>
 
-<Button on:click={() => (devModal = true)}>Admin Menu</Button>
+<Button on:click={() => (devModal = true)} color="alternative">Admin Menu</Button>
 
 <Modal bind:open={devModal} size="lg" outsideclose>
 	<Tabs style="underline">
