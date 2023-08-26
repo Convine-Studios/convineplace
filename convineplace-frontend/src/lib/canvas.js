@@ -43,7 +43,7 @@ export const canvasFunction = () => {
 			.eq('id', id)
 			.throwOnError();
 		} catch (error) {
-			//console.log(error);
+			////console.log(error);
 		}
 		
 	};

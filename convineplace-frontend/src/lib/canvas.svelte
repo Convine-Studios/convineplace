@@ -13,8 +13,8 @@
 	let canvasElement;
 
 	const drawCanvas = () => {
-		console.count("draw canvas");
-		if (!canvasElement) return "canvas element not there";
+		console.count('draw canvas');
+		if (!canvasElement) return 'canvas element not there';
 		const ctx = canvasElement.getContext('2d');
 		const canvasData = $canvasStore;
 
@@ -38,7 +38,7 @@
 		const x = Math.floor((event.clientX - rect.left) / 20);
 		const y = Math.floor((event.clientY - rect.top) / 20);
 		const id = y * 50 + x;
-		console.log('Adding color', id, $selectedColor);
+		//console.log('Adding color', id, $selectedColor);
 		$canvasStore[id] = $selectedColor;
 		updatePixel(id, $selectedColor);
 	};
@@ -47,13 +47,10 @@
 		if (canvasElement) drawCanvas();
 	});
 	onMount(async () => {
-		
 		await loadCanvas();
 		drawCanvas();
 		await subscribeToCanvasChanges();
-			
-	}
-	);
+	});
 </script>
 
 {#if $loading}
@@ -76,7 +73,7 @@
 		padding: 1px;
 		margin: 1rem;
 	}
-	
+
 	.placeholder {
 		width: 1000px;
 		height: 1000px;

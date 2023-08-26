@@ -14,10 +14,10 @@ export const supabaseFunction = () => {
 
     const onLogin = async () => {
         loggedIn.set(true);
-        console.log("onLogin");
+        //console.log("onLogin");
         const { data } = await supabase.auth.getUser();
         user = data.user;
-        console.log("user", user);
+        //console.log("user", user);
 
         try {
             const {data, error} = await supabase
@@ -27,16 +27,16 @@ export const supabaseFunction = () => {
                 .single()
                 .throwOnError();
 
-            console.log("profile", data);
+            //console.log("profile", data);
 
             user.profile = data;
         } catch (error) {
-            console.log(error);
+            //console.log(error);
         }
 
-        console.log(user);
+        //console.log(user);
         if (user.profile.status_banned) {
-            toast.error("Your accound has been banned.", {
+            toast.error("Your account has been banned.", {
                 duration: 3000,
                 position: 'top-right',
             });
@@ -65,7 +65,7 @@ export const supabaseFunction = () => {
             toast.error(error.message);
             throw error;
         }
-        console.log("Logged in", data);
+        //console.log("Logged in", data);
         user = data.user;
         return;
     };
@@ -74,37 +74,60 @@ export const supabaseFunction = () => {
         await supabase.auth.signOut();
         user = undefined;
         loggedIn.set(false);
-        console.log("logged out");
+        isAdmin.set(false);
+        //console.log("logged out");
     }
 
     const signup = async (email, password, username) => {
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password
+
+        try {
+            const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: password
         });
+        //console.log("data", data);
+        user = data.user;
+        //console.log("user", user);
         if (error) {
-            toast.error(error.message, toastSettings);
+            //console.log("error", error);
+            toast.error(error.message);
             throw error;
         }
-        data.user = user;
-        console.log("Create user", user);
+        
+        //console.log("Create user", user);
+        } catch (error) {
+            //console.log(error);
+            return;
+        }
+        
         toast.success("Account created", toastSettings);
         createProfile(user.id, username);
         login(email, password);
     };
 
     const createProfile = async (id, username) => {
-        const { data, error } = await supabase.from('profiles').insert([
-            { user_id: id,
-            username: username,
-            status_admin: false,
-            status_banned: false,
-        }]);
+        //console.log("createProfile", id, username);
+        try {
+            const { data, error } = await supabase.from('profiles').insert([
+            { 
+                user_id: id,
+                username: username,
+                status_admin: false,
+                status_banned: false,
+            }
+        ]).select().single();
+        //console.log("added profile", data);
+        user.profile = data;
         if (error) {
             throw error;
         }
-        console.log("Create profile", data);
-        user.profile = data;
+        } catch (error) {
+            //console.log(error);
+        }
+       
+        //console.log("Create profile", data);
+        
+        loggedIn.set(true);
     };
 
     const getUser = () => {

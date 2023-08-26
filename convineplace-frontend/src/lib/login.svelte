@@ -28,9 +28,10 @@
 				try {
 					login(email, password);
 				} catch (error) {
-					console.log('Error while logging in', error);
+					//console.log('Error while logging in', error);
 				}
-			}}>
+			}}
+		>
 			Login
 		</Button>
 	</form>

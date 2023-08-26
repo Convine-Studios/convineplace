@@ -12,7 +12,17 @@
 	onMount(() =>
 		supabase.auth.onAuthStateChange((event, session) => {
 			if (event === 'SIGNED_IN' && !$loggedIn) {
-				onLogin();
+				$loggedIn = true;
+				//console.log('logged in');
+				try {
+					onLogin();
+				} catch (error) {
+					//console.log(error);
+				}
+			}
+			if (event === 'SIGNED_OUT') {
+				$loggedIn = false;
+				//console.log('Logged out');
 			}
 		})
 	);
