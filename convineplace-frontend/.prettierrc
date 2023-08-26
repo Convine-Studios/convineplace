@@ -11,7 +11,7 @@
     ],
     "overrides": [
         {
-            "files": "*.svelte",
+            "files": "*.svelte, *.js",
             "options": {
                 "parser": "svelte"
             }

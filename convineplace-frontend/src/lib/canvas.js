@@ -1,6 +1,8 @@
-import { supabase } from '$lib/supabase.js';
+import { supabaseFunction } from '$lib/supabase.js';
 import { canvas as canvasStore } from '$lib/states.js';
 import { loading } from '$lib/states.js';
+
+const { supabase } = supabaseFunction();
 
 export const canvasFunction = () => {
 

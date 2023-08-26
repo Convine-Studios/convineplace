@@ -1,28 +1,46 @@
 const WebSocket = require("ws");
 
-const MAX_CONNECTIONS = 1;
+const MAX_CONNECTIONS = 5; // Adjust the number of connections you'd like to test
 let connectedCount = 0;
-const startTime = Date.now();
+const testMessage = "broadcast this message";
+let receivedCount = 0;
 
-const connectWebSocket = () => {
-  return new Promise((resolve) => {
-    const ws = new WebSocket('wss://212.227.78.96:8443', {
-  rejectUnauthorized: false
-});
-
+const connectWebSocket = (clientNumber) => {
+  return new Promise((resolve, reject) => {
+    const ws = new WebSocket('wss://127.0.0.1:8080', {
+      rejectUnauthorized: false
+    });
 
     ws.on("open", () => {
       connectedCount++;
-      ws.close(); // Close the WebSocket connection
+      console.log(`Client ${clientNumber} connected. Total connected: ${connectedCount}`);
+
+      // Send a test message from the first client
+      if (connectedCount === 1) {
+        console.log("Sending test message from client 1.");
+        ws.send(testMessage);
+      }
+    });
+
+    ws.on("message", (data) => {
+      console.log(`Received message on client ${clientNumber}: ${data}`);
+      if (data === testMessage) {
+        receivedCount++;
+      }
+
+      // Close the connection after receiving the message
+      console.log(`Closing client ${clientNumber}`);
+      ws.close();
     });
 
     ws.on("close", () => {
-      resolve(); // Resolve the promise only after connection is closed
+      console.log(`Client ${clientNumber} closed.`);
+      resolve();
     });
 
     ws.on("error", (error) => {
-      console.error("WebSocket Error:", error);
-      resolve(); // resolve anyway to continue the test
+      console.error(`WebSocket Error on client ${clientNumber}:`, error);
+      reject(error);
     });
   });
 };
@@ -30,18 +48,17 @@ const connectWebSocket = () => {
 const runTest = async () => {
   const promises = [];
 
-  for (let i = 0; i < MAX_CONNECTIONS; i++) {
-    promises.push(connectWebSocket());
+  for (let i = 1; i <= MAX_CONNECTIONS; i++) {
+    promises.push(connectWebSocket(i));
   }
 
   await Promise.all(promises);
 
-  const endTime = Date.now();
-  const timeTaken = endTime - startTime;
-
-  console.log(
-    `Connected and closed ${connectedCount} websockets in ${timeTaken} ms`
-  );
+  if (receivedCount === MAX_CONNECTIONS) {
+    console.log(`Test passed: All ${MAX_CONNECTIONS} clients received the broadcasted message.`);
+  } else {
+    console.log(`Test failed: Only ${receivedCount} out of ${MAX_CONNECTIONS} clients received the broadcasted message.`);
+  }
 };
 
 runTest().catch((error) => {

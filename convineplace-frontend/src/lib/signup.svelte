@@ -1,20 +1,25 @@
 <script>
 	import { Input, Label, Helper, Button, Checkbox, A, Modal } from 'flowbite-svelte';
-
+	import { signupModal } from "$lib/states.js";
 	import { supabaseFunction } from '$lib/supabase.js';
 
-	import { loginModal } from '$lib/states';
+	let username = "";
+	let email = "";
+	let password = "";
+	let confirmPasswort = "";
 
-	const { login, getUser, supabase, logout } = supabaseFunction();
+	const { signup, getUser, supabase, logout } = supabaseFunction();
 
-	let email = '';
-	let password = '';
 </script>
 
-<Button on:click={() => ($loginModal = true)} color="alternative">Login</Button>
+<Button on:click={() => ($signupModal = true)}>Signup</Button>
 
-<Modal title="Login" bind:open={$loginModal} outsideclose>
+<Modal title="Terms of Service" bind:open={$signupModal} outsideclose>
 	<form>
+		<div class="mb-6">
+			<Label for="email" class="mb-2">Username</Label>
+			<Input type="email" id="email" placeholder="duck69" required bind:value={username} />
+		</div>
 		<div class="mb-6">
 			<Label for="email" class="mb-2">Email address</Label>
 			<Input type="email" id="email" placeholder="prob@gmail.com" required bind:value={email} />
@@ -26,7 +31,7 @@
 		<Button
 			on:click={() => {
 				try {
-					login(email, password);
+					signup(email, password);
 				} catch (error) {
 					console.log('Error while logging in', error);
 				}

@@ -7,6 +7,20 @@ export const loading = writable(true);
 
 export const selectedColor = writable('#ff4500');
 
+export const loginModal = writable(false);
+export const signupModal = writable(false);
+export const profileModal = writable(false);
+export const adminModal = writable(false);
+
+export const loggedIn = writable(false);
+export const isAdmin = writable(false);
+
+export const toastSettings = {
+    duration: 3000,
+    position: 'top-right',
+};
+
+
 export const colors = writable([
     '#ff4500',
     '#ffa800',

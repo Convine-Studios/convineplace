@@ -18,27 +18,23 @@
 	</script>
 
 	<Tabs style="underline">
-		<TabItem open>
+		<TabItem>
 			<div slot="title" class="flex items-center gap-2">
 				<Icon name="grid-solid" size="sm" />
 				Dashboard
 			</div>
-			<p class="text-sm text-gray-500 dark:text-gray-400">
+			<p class="text-sm text-gray-500 dark:text-gray-400 h-96">
 				<b>Dashboard:</b>
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
 				labore et dolore magna aliqua.
 			</p>
 		</TabItem>
-		<TabItem>
+		<TabItem open>
 			<div slot="title" class="flex items-center gap-2">
 				<Icon name="user-circle-solid" size="sm" />
 				Users
 			</div>
-			<p class="text-sm text-gray-500 dark:text-gray-400">
-				<b>Profile:</b>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-				labore et dolore magna aliqua.
-			</p>
+			<div class="h-96">User</div>
 		</TabItem>
 		<TabItem>
 			<div slot="title" class="flex items-center gap-2">
@@ -75,9 +71,7 @@
 				<Icon name="clipboard-solid" size="sm" />
 				Colors
 			</div>
-			<div class="">
-
-			</div>
+			<div class="" />
 		</TabItem>
 	</Tabs>
 </Modal>

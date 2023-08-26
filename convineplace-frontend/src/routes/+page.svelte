@@ -4,12 +4,18 @@
 	import Canvas from '$lib/canvas.svelte';
 	import Navbar from '$lib/navbar.svelte';
 	import { onMount, afterUpdate } from 'svelte';
-	import { canvas as canvasStore, loading } from '$lib/states.js';
-	import { supabase } from '$lib/supabase.js';
+	import { canvas as canvasStore, loading, loggedIn } from '$lib/states.js';
+	import { supabaseFunction } from '$lib/supabase.js';
 
-	function toggle() {
-		loading.update((current) => !current);
-	}
+	const { supabase, onLogin } = supabaseFunction();
+
+	onMount(() =>
+		supabase.auth.onAuthStateChange((event, session) => {
+			if (event === 'SIGNED_IN' && !$loggedIn) {
+				onLogin();
+			}
+		})
+	);
 </script>
 
 <div class="container">

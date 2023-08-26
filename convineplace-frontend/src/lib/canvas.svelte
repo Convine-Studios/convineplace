@@ -1,14 +1,20 @@
 <script>
+	import { loggedIn, loading } from '$lib/states.js';
+	import { Spinner } from 'flowbite-svelte';
+	import toast from 'svelte-french-toast';
 	import { onMount, afterUpdate } from 'svelte';
 	import { canvas as canvasStore, selectedColor } from '$lib/states.js';
-	import { supabase } from '$lib/supabase.js';
+	import { supabaseFunction } from '$lib/supabase.js';
 	import { canvasFunction } from '$lib/canvas.js';
 
 	const { loadCanvas, subscribeToCanvasChanges, updatePixel } = canvasFunction();
+	const { supabase } = supabaseFunction();
 
 	let canvasElement;
 
 	const drawCanvas = () => {
+		console.count("draw canvas");
+		if (!canvasElement) return "canvas element not there";
 		const ctx = canvasElement.getContext('2d');
 		const canvasData = $canvasStore;
 
@@ -21,37 +27,58 @@
 	};
 
 	const assignColor = async (event) => {
+		if (!$loggedIn) {
+			toast.error('You need to be logged in to place a pixel', {
+				duration: 3000,
+				position: 'top-right'
+			});
+			return;
+		}
 		const rect = canvasElement.getBoundingClientRect();
 		const x = Math.floor((event.clientX - rect.left) / 20);
 		const y = Math.floor((event.clientY - rect.top) / 20);
 		const id = y * 50 + x;
-		console.log("Adding color", id, $selectedColor);
+		console.log('Adding color', id, $selectedColor);
 		$canvasStore[id] = $selectedColor;
 		updatePixel(id, $selectedColor);
-
-		
 	};
 
-	afterUpdate(drawCanvas);
-	onMount(async () => {
-		await loadCanvas();
-		await subscribeToCanvasChanges();
-		drawCanvas();
+	afterUpdate(() => {
+		if (canvasElement) drawCanvas();
 	});
+	onMount(async () => {
+		
+		await loadCanvas();
+		drawCanvas();
+		await subscribeToCanvasChanges();
+			
+	}
+	);
 </script>
 
-<canvas
-	class="canvas"
-	bind:this={canvasElement}
-	width="1000"
-	height="1000"
-	on:click={assignColor}
-/>
+{#if $loading}
+	<div class="placeholder flex place-content-center place-items-center">
+		<Spinner size={16} />
+	</div>
+{:else}
+	<canvas
+		class="canvas"
+		bind:this={canvasElement}
+		width="1000"
+		height="1000"
+		on:click={assignColor}
+	/>
+{/if}
 
 <style>
 	.canvas {
 		border: solid 3px black;
 		padding: 1px;
 		margin: 1rem;
+	}
+	
+	.placeholder {
+		width: 1000px;
+		height: 1000px;
 	}
 </style>

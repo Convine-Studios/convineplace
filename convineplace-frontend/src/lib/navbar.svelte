@@ -1,6 +1,8 @@
 <script>
+	import { supabaseFunction } from '$lib/supabase.js';
 	import {
 		Navbar,
+		Button,
 		NavBrand,
 		NavLi,
 		NavUl,
@@ -13,7 +15,19 @@
 	} from 'flowbite-svelte';
 	import Devmenu from '$lib/devmenu.svelte';
 	import Login from '$lib/login.svelte';
-	import Register from '$lib/register.svelte';
+	import Signup from '$lib/signup.svelte';
+	import { loggedIn, isAdmin } from './states';
+
+	const { login, getUser, supabase, logout } = supabaseFunction();
+
+	const checkIfAdmin = () => {
+		const user = getUser();
+		if (!!user) {
+			return user.profile.status_admin;
+		}
+		return false;
+	}
+	
 </script>
 
 <Navbar let:hidden let:toggle>
@@ -25,10 +39,17 @@
 		/>
 		<span class="self-center whitespace-nowrap text-xl font-semibold dark:text-white">c/Place</span>
 	</NavBrand>
-	<div class="flex md:order-2 gap-2">
+	<div class="flex md:order-2 gap-2 place-content-end">
+		{#if $isAdmin}
 		<Devmenu />
+		{/if}
+
+		{#if $loggedIn}
+		<Button on:click={() => logout()}>Logout</Button>
+		{:else}
 		<Login />
-		<Register />
+		<Signup />
+		{/if} 
 	</div>
 	<div class="flex items-center md:order-2">
 		<Avatar
@@ -37,11 +58,4 @@
 		/>
 		<NavHamburger on:click={toggle} class1="w-full md:flex md:w-auto md:order-1" />
 	</div>
-	<NavUl {hidden} class="order-1">
-		<NavLi href="/" active={true}>Home</NavLi>
-		<NavLi href="/about">About</NavLi>
-		<NavLi href="/docs/components/navbar">Navbar</NavLi>
-		<NavLi href="/pricing">Pricing</NavLi>
-		<NavLi href="/contact">Contact</NavLi>
-	</NavUl>
 </Navbar>
