@@ -9,7 +9,7 @@
 	const { initWebSocket, sendMessage } = websocket();
 	const { supabase, fetchSettings } = supabaseFunction();
 
-	let devModal = true;
+	let devModal = false;
 
 	let timer = 0;
 </script>

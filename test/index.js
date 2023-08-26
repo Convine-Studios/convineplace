@@ -7,34 +7,34 @@ let receivedCount = 0;
 
 const connectWebSocket = (clientNumber) => {
   return new Promise((resolve, reject) => {
-    const ws = new WebSocket('wss://127.0.0.1:8080', {
-      rejectUnauthorized: false
+    const ws = new WebSocket("wss://127.0.0.1:8080", {
+      rejectUnauthorized: false,
     });
 
     ws.on("open", () => {
       connectedCount++;
-      console.log(`Client ${clientNumber} connected. Total connected: ${connectedCount}`);
+      //console.log(`Client ${clientNumber} connected. Total connected: ${connectedCount}`);
 
       // Send a test message from the first client
       if (connectedCount === 1) {
-        console.log("Sending test message from client 1.");
+        //console.log("Sending test message from client 1.");
         ws.send(testMessage);
       }
     });
 
     ws.on("message", (data) => {
-      console.log(`Received message on client ${clientNumber}: ${data}`);
+      //console.log(`Received message on client ${clientNumber}: ${data}`);
       if (data === testMessage) {
         receivedCount++;
       }
 
       // Close the connection after receiving the message
-      console.log(`Closing client ${clientNumber}`);
+      //console.log(`Closing client ${clientNumber}`);
       ws.close();
     });
 
     ws.on("close", () => {
-      console.log(`Client ${clientNumber} closed.`);
+      //console.log(`Client ${clientNumber} closed.`);
       resolve();
     });
 
@@ -55,9 +55,9 @@ const runTest = async () => {
   await Promise.all(promises);
 
   if (receivedCount === MAX_CONNECTIONS) {
-    console.log(`Test passed: All ${MAX_CONNECTIONS} clients received the broadcasted message.`);
+    //console.log(`Test passed: All ${MAX_CONNECTIONS} clients received the broadcasted message.`);
   } else {
-    console.log(`Test failed: Only ${receivedCount} out of ${MAX_CONNECTIONS} clients received the broadcasted message.`);
+    //console.log(`Test failed: Only ${receivedCount} out of ${MAX_CONNECTIONS} clients received the broadcasted message.`);
   }
 };
 
