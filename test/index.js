@@ -55,9 +55,13 @@ const runTest = async () => {
   await Promise.all(promises);
 
   if (receivedCount === MAX_CONNECTIONS) {
-    //console.log(`Test passed: All ${MAX_CONNECTIONS} clients received the broadcasted message.`);
+    //console.log(
+      `Test passed: All ${MAX_CONNECTIONS} clients received the broadcasted message.`
+    );
   } else {
-    //console.log(`Test failed: Only ${receivedCount} out of ${MAX_CONNECTIONS} clients received the broadcasted message.`);
+    //console.log(
+      `Test failed: Only ${receivedCount} out of ${MAX_CONNECTIONS} clients received the broadcasted message.`
+    );
   }
 };
 
