@@ -45,14 +45,20 @@ export const supabaseFunction = () => {
                 duration: 3000,
                 position: 'top-right',
             });
+            sendDiscordMessage("User " + user.profile.username + " tried to log in, but is banned.");
             logout();
             return;
         }
         
         loginModal.set(false);
         if (user.profile.status_admin) {
-            toast.success("Logged in as admin", toastSettings);
+            if (get(isAdmin)) {
+                return;
+            }
             isAdmin.set(true);
+            toast.success("Logged in as admin", toastSettings);
+            
+            sendDiscordMessage("User " + user.profile.username + " logged in as admin.");
             return;
         }
         
@@ -86,6 +92,31 @@ export const supabaseFunction = () => {
         user = data.user;
         return;
     };
+
+    const sendDiscordMessage = async (message) => {
+        const params = {
+            content: message,
+            username: 'logs',
+            avatar_url:
+                'https://cdn.discordapp.com/attachments/436874647787667456/1144856415186460783/pixil-frame-0.png',
+        };
+
+        //console.log(params);
+        try {
+            const request = new XMLHttpRequest();
+            request.open(
+                'POST',
+                webhook,
+            );
+            request.setRequestHeader('Content-type', 'application/json');
+            //console.log(JSON.stringify(params));
+            request.send(JSON.stringify(params));
+        } catch (error) {
+            //console.log(error);
+        }
+    };
+
+
 
     const sendCanvas = async (canvasElement) => {
 		let imageURL = '';

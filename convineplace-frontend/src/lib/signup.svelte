@@ -36,7 +36,7 @@
 				}
 			}}
 		>
-			Login
+			Signup
 		</Button>
 	</form>
 </Modal>
