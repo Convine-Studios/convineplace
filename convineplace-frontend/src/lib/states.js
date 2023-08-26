@@ -21,6 +21,7 @@ export const toastSettings = {
     position: 'top-right',
 };
 
+export const settings = writable([]);
 
 export const colors = writable([
     '#ff4500',

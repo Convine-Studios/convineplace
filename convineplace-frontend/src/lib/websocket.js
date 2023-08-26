@@ -11,7 +11,7 @@ const initWebSocket = () => {
 
   ws.addEventListener("message", (event) => {
     log += `Received: ${event.data}\n`;
-    console.log(event.data);
+    //console.log(event.data);
   });
 
   ws.addEventListener("close", (event) => {

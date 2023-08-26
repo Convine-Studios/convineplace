@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import toast from "svelte-french-toast"; 
 
-import { loggedIn, loginModal, toastSettings, isAdmin } from '$lib/states';
+import { loggedIn, loginModal, toastSettings, isAdmin, settings } from '$lib/states';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY; 
@@ -55,6 +55,18 @@ export const supabaseFunction = () => {
         return;
     };
 
+
+    const fetchSettings = async () => {
+		try {
+		const { data, error } = await supabase.from('settings').select('*').throwOnError();
+        //console.log("settings", data);
+        settings.set(data);
+		} catch (error) {
+			//console.log(error);
+		}
+        
+            
+	};
 
     const login = async (email, password) => {
         const { data, error } = await supabase.auth.signInWithPassword({
@@ -141,6 +153,7 @@ export const supabaseFunction = () => {
         signup,
         user,
         getUser,
-        onLogin
+        onLogin,
+        fetchSettings
     };
 };

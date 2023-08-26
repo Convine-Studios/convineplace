@@ -26,14 +26,13 @@
 			return user.profile.status_admin;
 		}
 		return false;
-	}
-	
+	};
 </script>
 
 <Navbar let:hidden let:toggle>
 	<NavBrand href="/">
 		<img
-			src="https://cdn.discordapp.com/attachments/436874647787667456/498254921443966976/IMG_20180115_111548140_BURST000_COVER_TOP.jpg"
+			src="https://cdn.discordapp.com/attachments/436874647787667456/1144856415186460783/pixil-frame-0.png"
 			class="mr-3 h-6 sm:h-9"
 			alt="Flowbite Logo"
 		/>
@@ -41,21 +40,18 @@
 	</NavBrand>
 	<div class="flex md:order-2 gap-2 place-content-end">
 		{#if $isAdmin}
-		<Devmenu />
+			<Devmenu />
 		{/if}
 
 		{#if $loggedIn}
-		<Button on:click={() => logout()}>Logout</Button>
+			<Button on:click={() => logout()}>Logout</Button>
 		{:else}
-		<Login />
-		<Signup />
-		{/if} 
+			<Login />
+			<Signup />
+		{/if}
 	</div>
 	<div class="flex items-center md:order-2">
-		<Avatar
-			id="avatar-menu"
-			src="https://cdn.discordapp.com/attachments/436874647787667456/498254921443966976/IMG_20180115_111548140_BURST000_COVER_TOP.jpg"
-		/>
+		<Avatar id="avatar-menu" src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" />
 		<NavHamburger on:click={toggle} class1="w-full md:flex md:w-auto md:order-1" />
 	</div>
 </Navbar>
