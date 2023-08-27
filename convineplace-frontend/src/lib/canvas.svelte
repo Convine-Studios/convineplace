@@ -16,7 +16,6 @@
 	import { onMount, afterUpdate } from 'svelte';
 	import { supabaseFunction } from '$lib/supabase.js';
 	import { canvasFunction } from '$lib/canvas.js';
-
 	const cords = () => {
 		const canvas = $canvasElement;
 		canvas.addEventListener('mousemove', function (event) {
@@ -32,7 +31,9 @@
 		});
 	};
 
-	const { loadCanvas, subscribeToCanvasChanges, updatePixel } = canvasFunction();
+	$: $canvasStore, drawCanvas();
+
+	const { loadCanvas, updatePixel, subscribeToCanvasChanges } = canvasFunction();
 
 	const drawCanvas = () => {
 		console.count('draw canvas');

@@ -14,6 +14,10 @@
 	} from '$lib/states.js';
 	import toast from 'svelte-french-toast';
 
+	const toClipboard = (text) => {
+		navigator.clipboard.writeText(text);
+	};
+
 	const { initWebSocket, sendMessage } = websocket();
 	const { fetchSettings, sendCanvas, searchUser, toggleBan, toggleAdmin, searchUUID } =
 		supabaseFunction();
@@ -30,28 +34,44 @@
 		sendCanvas(canvas);
 	};
 
-	let devModal = false;
+	let devModal = true;
 
 	let timer = 0;
 
 	let userSearch = '';
 	let uuidSearch = '';
+
+	let pixelLookup = '';
 </script>
 
 <Button on:click={() => (devModal = true)} color="alternative">Admin Menu</Button>
 
 <Modal bind:open={devModal} size="lg" outsideclose>
 	<Tabs style="underline">
-		<TabItem>
+		<TabItem open>
 			<div slot="title" class="flex items-center gap-2">
 				<Icon name="grid-solid" size="sm" />
 				Dashboard
 			</div>
 			<div class="h-96">
 				<Button on:click={handleScreenshot}>Screenshot canvas</Button>
+				<Button>Placeholder</Button>
+				<Button>Placeholder</Button>
+				<Button>Placeholder</Button>
+				<Button>Placeholder</Button>
+				<hr class="m-4" />
+				<div class="grid grid-cols-2 gap-2">
+					<div class="">
+						<div class="">
+							<h1 class="text-lg">Pixel lookup</h1>
+							<Input />
+						</div>
+					</div>
+					<div class="">Col 2</div>
+				</div>
 			</div>
 		</TabItem>
-		<TabItem open>
+		<TabItem>
 			<div slot="title" class="flex items-center gap-2">
 				<Icon name="user-circle-solid" size="sm" />
 				Users
@@ -78,18 +98,26 @@
 								<Badge large color="purple">ADMIN</Badge>
 							{/if}
 						</h1>
-						<p>
-							ID: {$userSearchResult.profile_id}
-						</p>
-						<p class="font-md">
-							Username: {$userSearchResult.username}
-						</p>
-						<p class="font-md">
-							USER ID: {$userSearchResult.user_id}
-						</p>
-						<p class="font-md">
-							Pixels placed: {$userSearchResult.pixels_placed}
-						</p>
+						<button on:click={toClipboard($userSearchResult.profile_id)}>
+							<p class="font-md">
+								ID: {$userSearchResult.profile_id}
+							</p>
+						</button> <br />
+						<button on:click={toClipboard($userSearchResult.username)}>
+							<p class="font-md">
+								Username: {$userSearchResult.username}
+							</p>
+						</button>
+						<button on:click={toClipboard($userSearchResult.user_id)}>
+							<p class="font-md">
+								USER ID: {$userSearchResult.user_id}
+							</p>
+						</button>
+						<button on:click={toClipboard($userSearchResult.pixels_placed)}>
+							<p class="font-md">
+								Pixels placed: {$userSearchResult.pixels_placed}
+							</p>
+						</button>
 						<div class="my-5">
 							{#if $userSearchResult.status_banned}
 								<Button class="w-24" id="unban">Unban</Button>

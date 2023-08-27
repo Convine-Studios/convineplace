@@ -155,7 +155,7 @@ export const supabaseFunction = () => {
                 data,
                 error
             } = await supabase.from('profiles').update({
-                status_banned: !get(userSearchResult).status_admin
+                status_admin: !get(userSearchResult).status_admin
             }).eq('profile_id', profile_id).single().throwOnError();
             //console.log("toggleBan", data);
             if (get(userSearchResult).status_admin) {

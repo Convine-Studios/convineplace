@@ -25,13 +25,15 @@ export const canvasFunction = () => {
 	};
 
     const subscribeToCanvasChanges = () => {
+		//console.log('subscribing to canvas changes');
     channel
 		.on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'pixels' }, (payload) => {
+			//console.log('canvas change', payload);
 			const { id, color } = payload.new;
-			canvasStore.update((currentCanvas) => {
-				currentCanvas[id] = color;
-				return { ...currentCanvas };
-			});
+			canvasStore.update(arr => {
+				arr[id] = color;
+				return arr;
+			})
 		})
 		.subscribe();
     };
