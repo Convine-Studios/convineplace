@@ -56,8 +56,8 @@
 				<Icon name="user-circle-solid" size="sm" />
 				Users
 			</div>
-			<div class="h-96 grid grid-cols-2">
-				<div class="">
+			<div class="h-96 grid grid-cols-2 gap-2">
+				<div class=" justify-between">
 					Username:
 					<div class="flex gap-4">
 						<Input bind:value={userSearch} class="w-72" />
@@ -92,7 +92,7 @@
 						</p>
 						<div class="my-5">
 							{#if $userSearchResult.status_banned}
-								<Button class="w-32" id="unban">Unban</Button>
+								<Button class="w-24" id="unban">Unban</Button>
 								<Popover
 									class="w-min text-sm font-light "
 									title="You sure?"
@@ -105,7 +105,7 @@
 								</Popover>
 								<Button disabled class="w-32" color="red">Make Admin</Button>
 							{:else}
-								<Button class="w-32" id="ban">Ban</Button>
+								<Button class="w-24" id="ban">Ban</Button>
 								<Popover
 									class="w-min text-sm font-light place-content-center"
 									title="You sure?"
@@ -145,6 +145,13 @@
 									</Popover>
 								{/if}
 							{/if}
+							<Button
+								color="alternative"
+								on:click={() => {
+									uuidSearch = $userSearchResult.user_id;
+									searchUUID(uuidSearch);
+								}}>Open UUID</Button
+							>
 						</div>
 					{/if}
 				</div>
@@ -152,9 +159,7 @@
 					UUID:
 					<div class="flex gap-4">
 						<Input bind:value={uuidSearch} class="w-72" />
-						<Button on:click={() => toast.error('not yet implemented', toastSettings)} class=""
-							>Search</Button
-						>
+						<Button on:click={searchUUID(uuidSearch)} class="">Search</Button>
 					</div>
 					<hr class="m-4" />
 					{#if $loadingAdmin}
@@ -162,8 +167,14 @@
 					{:else if !$uuidSearchResult}
 						<div class="text-center m-24">Search for a uuid to be displayed here.</div>
 					{:else}
-						<p>Username: {$uuidSearchResult.email}</p>
-						<p />
+						<h1 class="font-bold text-xl content-center">
+							{$uuidSearchResult.id}
+						</h1>
+						<p class="font-md">Email: {$uuidSearchResult.email}</p>
+						<p class="font-md">Created at: {$uuidSearchResult.created_at}</p>
+						<p class="font-md">Last changed: {$uuidSearchResult.updated_at}</p>
+						<p class="font-md">Last online: {$uuidSearchResult.last_sign_in_at}</p>
+						<p class="font-md">Role: {$uuidSearchResult.role}</p>
 					{/if}
 				</div>
 			</div>

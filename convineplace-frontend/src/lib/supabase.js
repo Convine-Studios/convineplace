@@ -13,6 +13,7 @@ import {
     loadingAdmin,
     canvas as canvasStore,
     loading,
+    uuidSearchResult
 
 } from '$lib/states';
 import {
@@ -184,6 +185,7 @@ export const supabaseFunction = () => {
             } = await supabase.from('profiles').select('*').eq('username', username).single().throwOnError();
             //console.log("searchUser Result", data);
             userSearchResult.set(data);
+            toast.success("User found", toastSettings);
             loadingAdmin.set(false);
             return data;
         } catch (error) {
@@ -195,6 +197,7 @@ export const supabaseFunction = () => {
                 toast.error(error.message, toastSettings);
             }
             //console.log(error);
+            loadingAdmin.set(false);
             return;
         }
             
@@ -203,25 +206,43 @@ export const supabaseFunction = () => {
     const searchUUID = async (uuid) => {
         loadingAdmin.set(true);
         try {
-            const {
-                data,
-                error
-            } = await supabase.from('users').select('*').eq('user_id', uuid).single().throwOnError();
-            //console.log("searchUUID Result", data);
-            uuidSearchResult.set(data);
-            loadingAdmin.set(false);
-            return data;
-        } catch (error) {
-            if (error.code === "PGRST116") {
-                toast.error("User not found", toastSettings);
-                //console.log(error);
-            }
-            else {
-                toast.error(error.message, toastSettings);
-            }
-            //console.log(error);
-            return;
+        // Make sure to provide the correct schema if it is not public
+        const { data, error } = await supabase.rpc('get_user', { user_uuid: uuid });
+        if (error) {
+            throw error;
         }
+        console.log("searchUUID Result", data);
+        uuidSearchResult.set(data);
+        toast.success("User found", toastSettings);
+        loadingAdmin.set(false);
+        return data;
+    } catch (error) {
+        toast.error(error.message, toastSettings);
+        console.error("Error in searchUUID:", error);
+        loadingAdmin.set(false);
+    }
+
+        // 
+        // try {
+        //     const {
+        //         data,
+        //         error
+        //     } = await supabase.from('users').select('*').eq('user_id', uuid).single().throwOnError();
+        //     //console.log("searchUUID Result", data);
+        //     
+        //     
+        //     
+        // } catch (error) {
+        //     if (error.code === "PGRST116") {
+        //         toast.error("User not found", toastSettings);
+        //         //console.log(error);
+        //     }
+        //     else {
+        //         toast.error(error.message, toastSettings);
+        //     }
+        //     //console.log(error);
+        //     return;
+        // }
     };
 
     const sendDiscordMessage = async (message) => {
