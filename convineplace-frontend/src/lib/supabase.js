@@ -143,7 +143,7 @@ export const supabaseFunction = () => {
             }
             sendDiscordMessage("User " + getUser().profile.username + " banned user " + get(userSearchResult.username) + ".");
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             toast.error(error.message, toastSettings);
         }
     };
@@ -170,7 +170,7 @@ export const supabaseFunction = () => {
             }
             sendDiscordMessage("User " + getUser().profile.username + " made user " + get(userSearchResult.username) + " an admin.");
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             toast.error(error.message, toastSettings);
         }
     };
@@ -182,19 +182,19 @@ export const supabaseFunction = () => {
                 data,
                 error
             } = await supabase.from('profiles').select('*').eq('username', username).single().throwOnError();
-            console.log("searchUser Result", data);
+            //console.log("searchUser Result", data);
             userSearchResult.set(data);
             loadingAdmin.set(false);
             return data;
         } catch (error) {
             if (error.code === "PGRST116") {
                 toast.error("User not found", toastSettings);
-                console.log(error);
+                //console.log(error);
             }
             else {
                 toast.error(error.message, toastSettings);
             }
-            console.log(error);
+            //console.log(error);
             return;
         }
             
@@ -207,19 +207,19 @@ export const supabaseFunction = () => {
                 data,
                 error
             } = await supabase.from('users').select('*').eq('user_id', uuid).single().throwOnError();
-            console.log("searchUUID Result", data);
+            //console.log("searchUUID Result", data);
             uuidSearchResult.set(data);
             loadingAdmin.set(false);
             return data;
         } catch (error) {
             if (error.code === "PGRST116") {
                 toast.error("User not found", toastSettings);
-                console.log(error);
+                //console.log(error);
             }
             else {
                 toast.error(error.message, toastSettings);
             }
-            console.log(error);
+            //console.log(error);
             return;
         }
     };
