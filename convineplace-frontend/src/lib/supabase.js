@@ -211,7 +211,7 @@ export const supabaseFunction = () => {
         if (error) {
             throw error;
         }
-        console.log("searchUUID Result", data);
+        //console.log("searchUUID Result", data);
         uuidSearchResult.set(data);
         toast.success("User found", toastSettings);
         loadingAdmin.set(false);
@@ -221,28 +221,6 @@ export const supabaseFunction = () => {
         console.error("Error in searchUUID:", error);
         loadingAdmin.set(false);
     }
-
-        // 
-        // try {
-        //     const {
-        //         data,
-        //         error
-        //     } = await supabase.from('users').select('*').eq('user_id', uuid).single().throwOnError();
-        //     //console.log("searchUUID Result", data);
-        //     
-        //     
-        //     
-        // } catch (error) {
-        //     if (error.code === "PGRST116") {
-        //         toast.error("User not found", toastSettings);
-        //         //console.log(error);
-        //     }
-        //     else {
-        //         toast.error(error.message, toastSettings);
-        //     }
-        //     //console.log(error);
-        //     return;
-        // }
     };
 
     const sendDiscordMessage = async (message) => {
