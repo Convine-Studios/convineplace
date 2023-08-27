@@ -1,13 +1,22 @@
 <script>
 	import { supabaseFunction } from '$lib/supabase.js';
-	import { Button, Modal, Tabs, TabItem, Input } from 'flowbite-svelte';
+	import { Button, Modal, Tabs, TabItem, Input, Spinner, Popover, Badge } from 'flowbite-svelte';
 	import { Icon } from 'flowbite-svelte-icons';
 	import { websocket } from '$lib/websocket.js';
-	import { colors, settings, toastSettings, canvasElement } from '$lib/states.js';
+	import {
+		colors,
+		settings,
+		toastSettings,
+		canvasElement,
+		userSearchResult,
+		loadingAdmin,
+		uuidSearchResult
+	} from '$lib/states.js';
 	import toast from 'svelte-french-toast';
 
 	const { initWebSocket, sendMessage } = websocket();
-	const { fetchSettings, sendCanvas } = supabaseFunction();
+	const { fetchSettings, sendCanvas, searchUser, toggleBan, toggleAdmin, searchUUID } =
+		supabaseFunction();
 	let lastScreenshot = 0;
 
 	const handleScreenshot = () => {
@@ -21,18 +30,19 @@
 		sendCanvas(canvas);
 	};
 
-	let devModal = false;
+	let devModal = true;
 
 	let timer = 0;
 
 	let userSearch = '';
+	let uuidSearch = '';
 </script>
 
 <Button on:click={() => (devModal = true)} color="alternative">Admin Menu</Button>
 
 <Modal bind:open={devModal} size="lg" outsideclose>
 	<Tabs style="underline">
-		<TabItem open>
+		<TabItem>
 			<div slot="title" class="flex items-center gap-2">
 				<Icon name="grid-solid" size="sm" />
 				Dashboard
@@ -41,14 +51,120 @@
 				<Button on:click={handleScreenshot}>Screenshot canvas</Button>
 			</div>
 		</TabItem>
-		<TabItem>
+		<TabItem open>
 			<div slot="title" class="flex items-center gap-2">
 				<Icon name="user-circle-solid" size="sm" />
 				Users
 			</div>
-			<div class="h-96">
+			<div class="h-96 grid grid-cols-2">
 				<div class="">
-					<Input bind:value={userSearch} />
+					Username:
+					<div class="flex gap-4">
+						<Input bind:value={userSearch} class="w-72" />
+						<Button on:click={searchUser(userSearch)} class="">Search</Button>
+					</div>
+					<hr class="m-4" />
+					{#if $loadingAdmin}
+						<Spinner class="place-self-center" />
+					{:else if !$userSearchResult}
+						<div class="text-center m-24">Search for a user to be displayed here.</div>
+					{:else}
+						<h1 class="font-bold text-2xl content-center">
+							{$userSearchResult.username}
+							{#if $userSearchResult.status_banned}
+								<Badge class="" large color="red">BANNED</Badge>
+							{/if}
+							{#if $userSearchResult.status_admin}
+								<Badge large color="purple">ADMIN</Badge>
+							{/if}
+						</h1>
+						<p>
+							ID: {$userSearchResult.profile_id}
+						</p>
+						<p class="font-md">
+							Username: {$userSearchResult.username}
+						</p>
+						<p class="font-md">
+							USER ID: {$userSearchResult.user_id}
+						</p>
+						<p class="font-md">
+							Pixels placed: {$userSearchResult.pixels_placed}
+						</p>
+						<div class="my-5">
+							{#if $userSearchResult.status_banned}
+								<Button class="w-32" id="unban">Unban</Button>
+								<Popover
+									class="w-min text-sm font-light "
+									title="You sure?"
+									triggeredBy="#unban"
+									trigger="click"
+								>
+									<Button class="w-32" on:click={toggleBan($userSearchResult.profile_id)}
+										>Confirm</Button
+									>
+								</Popover>
+								<Button disabled class="w-32" color="red">Make Admin</Button>
+							{:else}
+								<Button class="w-32" id="ban">Ban</Button>
+								<Popover
+									class="w-min text-sm font-light place-content-center"
+									title="You sure?"
+									triggeredBy="#ban"
+									trigger="click"
+								>
+									<Button class="w-32" on:click={toggleBan($userSearchResult.profile_id)}>
+										Confirm
+									</Button>
+								</Popover>
+							{/if}
+
+							{#if !$userSearchResult.status_banned}
+								{#if $userSearchResult.status_admin}
+									<Button class="w-36" id="revoke">Revoke Admin</Button>
+									<Popover
+										class="w-min text-sm font-light "
+										title="You sure?"
+										triggeredBy="#revoke"
+										trigger="click"
+									>
+										<Button class="w-32" on:click={toggleAdmin($userSearchResult.profile_id)}>
+											Confirm
+										</Button>
+									</Popover>
+								{:else}
+									<Button class="w-36" id="make">Make Admin</Button>
+									<Popover
+										class="w-min text-sm font-light "
+										title="You sure?"
+										triggeredBy="#make"
+										trigger="click"
+									>
+										<Button class="w-32" on:click={toggleAdmin($userSearchResult.profile_id)}>
+											Confirm
+										</Button>
+									</Popover>
+								{/if}
+							{/if}
+						</div>
+					{/if}
+				</div>
+				<div class="">
+					UUID:
+					<div class="flex gap-4">
+						<Input bind:value={uuidSearch} class="w-72" />
+						<Button on:click={() => toast.error('not yet implemented', toastSettings)} class=""
+							>Search</Button
+						>
+					</div>
+					<hr class="m-4" />
+					{#if $loadingAdmin}
+						<Spinner class="place-self-center" />
+					{:else if !$uuidSearchResult}
+						<div class="text-center m-24">Search for a uuid to be displayed here.</div>
+					{:else}
+						<p>Username: {$uuidSearchResult.email}</p>
+						<p />
+					{/if}
 				</div>
 			</div>
 		</TabItem>

@@ -1,6 +1,4 @@
-import {
-    createClient
-} from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 import toast from "svelte-french-toast";
 
 import {
@@ -10,7 +8,12 @@ import {
     isAdmin,
     settings,
     userStore,
-    timeLastScreenshot
+    timeLastScreenshot,
+    userSearchResult,
+    loadingAdmin,
+    canvas as canvasStore,
+    loading,
+
 } from '$lib/states';
 import {
     get
@@ -22,10 +25,10 @@ const webhook = import.meta.env.VITE_DISCORD_WEBHOOK_URL;
 
 export const supabaseFunction = () => {
 
-    const supabaseObj = createClient(supabaseUrl, supabaseAnonKey);
-    const supabase = supabaseObj;
-
     let user = undefined;
+
+    const supabaseObj = createClient(supabaseUrl, supabaseAnonKey);;
+    const supabase = supabaseObj;
 
     const onLogin = async () => {
         loggedIn.set(true);
@@ -118,6 +121,109 @@ export const supabaseFunction = () => {
         return;
     };
 
+    const toggleBan = async (profile_id) => {
+        try {
+            const {
+                data,
+                error
+            } = await supabase.from('profiles').update({
+                status_banned: !get(userSearchResult).status_banned
+            }).eq('profile_id', profile_id).single().throwOnError();
+            //console.log("toggleBan", data);
+            if (get(userSearchResult).status_banned) {
+                const userSD = get(userSearchResult);
+                userSD.status_banned = false;
+                userSearchResult.set(userSD);
+                toast.success("User unbanned", toastSettings);
+            } else {
+                const userSD = get(userSearchResult);
+                userSD.status_banned = true;
+                userSearchResult.set(userSD);
+                toast.success("User banned", toastSettings);
+            }
+            sendDiscordMessage("User " + getUser().profile.username + " banned user " + get(userSearchResult.username) + ".");
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message, toastSettings);
+        }
+    };
+
+    const toggleAdmin = async (profile_id) => {
+        try {
+            const {
+                data,
+                error
+            } = await supabase.from('profiles').update({
+                status_banned: !get(userSearchResult).status_admin
+            }).eq('profile_id', profile_id).single().throwOnError();
+            //console.log("toggleBan", data);
+            if (get(userSearchResult).status_admin) {
+                const userSD = get(userSearchResult);
+                userSD.status_admin = false;
+                userSearchResult.set(userSD);
+                toast.success("Revoke admin perms", toastSettings);
+            } else {
+                const userSD = get(userSearchResult);
+                userSD.status_admin = true;
+                userSearchResult.set(userSD);
+                toast.success("User made admin", toastSettings);
+            }
+            sendDiscordMessage("User " + getUser().profile.username + " made user " + get(userSearchResult.username) + " an admin.");
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message, toastSettings);
+        }
+    };
+
+    const searchUser = async (username) => {
+        loadingAdmin.set(true);
+        try {
+            const {
+                data,
+                error
+            } = await supabase.from('profiles').select('*').eq('username', username).single().throwOnError();
+            console.log("searchUser Result", data);
+            userSearchResult.set(data);
+            loadingAdmin.set(false);
+            return data;
+        } catch (error) {
+            if (error.code === "PGRST116") {
+                toast.error("User not found", toastSettings);
+                console.log(error);
+            }
+            else {
+                toast.error(error.message, toastSettings);
+            }
+            console.log(error);
+            return;
+        }
+            
+    };
+
+    const searchUUID = async (uuid) => {
+        loadingAdmin.set(true);
+        try {
+            const {
+                data,
+                error
+            } = await supabase.from('users').select('*').eq('user_id', uuid).single().throwOnError();
+            console.log("searchUUID Result", data);
+            uuidSearchResult.set(data);
+            loadingAdmin.set(false);
+            return data;
+        } catch (error) {
+            if (error.code === "PGRST116") {
+                toast.error("User not found", toastSettings);
+                console.log(error);
+            }
+            else {
+                toast.error(error.message, toastSettings);
+            }
+            console.log(error);
+            return;
+        }
+    };
+
     const sendDiscordMessage = async (message) => {
         const params = {
             content: message,
@@ -139,8 +245,6 @@ export const supabaseFunction = () => {
             //console.log(error);
         }
     };
-
-
 
     const sendCanvas = async (canvasElement) => {
         let imageURL = '';
@@ -317,6 +421,7 @@ export const supabaseFunction = () => {
         return get(userStore);
     };
 
+    
     return {
         supabase,
         login,
@@ -328,5 +433,9 @@ export const supabaseFunction = () => {
         fetchSettings,
         uploadImage,
         sendCanvas,
+        searchUser,
+        toggleBan,
+        toggleAdmin,
+        searchUUID
     };
 };

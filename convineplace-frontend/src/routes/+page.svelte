@@ -9,7 +9,7 @@
 
 	const { supabase, onLogin } = supabaseFunction();
 
-	onMount(() =>
+	onMount(() => {
 		supabase.auth.onAuthStateChange((event, session) => {
 			if (event === 'SIGNED_IN' && !$loggedIn) {
 				$loggedIn = true;
@@ -24,8 +24,8 @@
 				$loggedIn = false;
 				//console.log('Logged out');
 			}
-		})
-	);
+		});
+	});
 </script>
 
 <div class="container">

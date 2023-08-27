@@ -20,6 +20,11 @@ export const hoveredPixelY = writable(0);
 export const timeLastScreenshot = writable(0);
 export const timeLastPixel = writable(0);
 
+export const userSearchResult = writable(null);
+export const uuidSearchResult = writable(null);
+
+export const loadingAdmin = writable(false);
+
 export const loggedIn = writable(false);
 export const isAdmin = writable(false);
 
