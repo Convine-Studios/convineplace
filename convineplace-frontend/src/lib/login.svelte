@@ -5,7 +5,7 @@
 
 	import { loginModal } from '$lib/states';
 
-	const { login, getUser, supabase, logout } = supabaseFunction();
+	const { login } = supabaseFunction();
 
 	let email = '';
 	let password = '';

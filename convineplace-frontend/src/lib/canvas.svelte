@@ -6,14 +6,31 @@
 		canvasElement,
 		canvas as canvasStore,
 		selectedColor,
-		timeLastScreenshot,
-		isAdmin
+		timeLastPixel,
+		isAdmin,
+		hoveredPixelX,
+		hoveredPixelY
 	} from '$lib/states.js';
 	import { Spinner, Button } from 'flowbite-svelte';
 	import toast from 'svelte-french-toast';
 	import { onMount, afterUpdate } from 'svelte';
 	import { supabaseFunction } from '$lib/supabase.js';
 	import { canvasFunction } from '$lib/canvas.js';
+
+	const cords = () => {
+		const canvas = $canvasElement;
+		canvas.addEventListener('mousemove', function (event) {
+			var rect = canvas.getBoundingClientRect();
+
+			// Convert mouse coordinates to canvas coordinates
+			var x = event.clientX - rect.left;
+			var y = event.clientY - rect.top;
+
+			// Convert to 20px pixel coordinates
+			$hoveredPixelX = Math.floor(x / 20) + 1;
+			$hoveredPixelY = Math.floor(y / 20) + 1;
+		});
+	};
 
 	const { loadCanvas, subscribeToCanvasChanges, updatePixel } = canvasFunction();
 
@@ -40,10 +57,10 @@
 			return;
 		}
 
-		const since = Date.now() - $timeLastScreenshot;
+		const since = Date.now() - $timeLastPixel;
 		//console.log(since);
 
-		if (!$isAdmin && since < 60000) {
+		if (!$isAdmin && since < 20000) {
 			let until = 60 - since / 1000;
 			until = Math.round(until);
 			toast.error('You can place the next pixel in ' + until, toastSettings);
@@ -53,19 +70,20 @@
 		const x = Math.floor((event.clientX - rect.left) / 20);
 		const y = Math.floor((event.clientY - rect.top) / 20);
 		const id = y * 50 + x;
+		if ($canvasStore[id] === $selectedColor) return;
 		//console.log('Adding color', id, $selectedColor);
 		$canvasStore[id] = $selectedColor;
 		updatePixel(id, $selectedColor);
-		$timeLastScreenshot = Date.now();
+		if ($canvasElement) drawCanvas();
+		$timeLastPixel = Date.now();
 	};
 
-	afterUpdate(() => {
-		if ($canvasElement) drawCanvas();
-	});
+	afterUpdate(() => {});
 	onMount(async () => {
 		await loadCanvas();
 		drawCanvas();
 		await subscribeToCanvasChanges();
+		cords();
 	});
 </script>
 
@@ -74,14 +92,16 @@
 		<Spinner size={16} />
 	</div>
 {:else}
-	<canvas
-		id="canvas"
-		class="canvas"
-		bind:this={$canvasElement}
-		width="1000"
-		height="1000"
-		on:click={assignColor}
-	/>
+	<div class="flex flex-col">
+		<canvas
+			id="canvas"
+			class="canvas"
+			bind:this={$canvasElement}
+			width="1000"
+			height="1000"
+			on:click={assignColor}
+		/>
+	</div>
 {/if}
 
 <style>

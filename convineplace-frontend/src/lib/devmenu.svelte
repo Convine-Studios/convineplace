@@ -7,7 +7,7 @@
 	import toast from 'svelte-french-toast';
 
 	const { initWebSocket, sendMessage } = websocket();
-	const { supabase, fetchSettings, sendCanvas } = supabaseFunction();
+	const { fetchSettings, sendCanvas } = supabaseFunction();
 	let lastScreenshot = 0;
 
 	const handleScreenshot = () => {
@@ -24,6 +24,8 @@
 	let devModal = false;
 
 	let timer = 0;
+
+	let userSearch = '';
 </script>
 
 <Button on:click={() => (devModal = true)} color="alternative">Admin Menu</Button>
@@ -44,7 +46,11 @@
 				<Icon name="user-circle-solid" size="sm" />
 				Users
 			</div>
-			<div class="h-96">User</div>
+			<div class="h-96">
+				<div class="">
+					<Input bind:value={userSearch} />
+				</div>
+			</div>
 		</TabItem>
 		<TabItem>
 			<div slot="title" class="flex items-center gap-2">

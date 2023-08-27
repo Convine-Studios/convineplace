@@ -1,8 +1,9 @@
 import { supabaseFunction } from '$lib/supabase.js';
 import { canvas as canvasStore } from '$lib/states.js';
 import { loading } from '$lib/states.js';
+import toast from 'svelte-french-toast';
 
-const { supabase } = supabaseFunction();
+const { supabase, getUser } = supabaseFunction();
 
 export const canvasFunction = () => {
 
@@ -36,10 +37,18 @@ export const canvasFunction = () => {
     };
 
 	const updatePixel = async (id, color) => {
+		if (!getUser()) {
+			toast.error('Something went teribly wrong! Im sorry </3', toastSettings);
+			return;
+		}
+
+
 		try {
 			const { data, error } = await supabase
 			.from('pixels')
-			.update({ color: color })
+			.update({ color: color,
+				last_updated_by: getUser().id,
+			 })
 			.eq('id', id)
 			.throwOnError();
 		} catch (error) {

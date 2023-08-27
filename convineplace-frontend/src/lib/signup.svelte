@@ -8,7 +8,7 @@
 	let password = '';
 	let confirmPasswort = '';
 
-	const { signup, getUser, supabase, logout } = supabaseFunction();
+	const { signup } = supabaseFunction();
 </script>
 
 <Button on:click={() => ($signupModal = true)}>Signup</Button>

@@ -18,7 +18,7 @@
 	import Signup from '$lib/signup.svelte';
 	import { loggedIn, isAdmin } from './states';
 
-	const { login, getUser, supabase, logout } = supabaseFunction();
+	const { getUser, logout } = supabaseFunction();
 
 	const checkIfAdmin = () => {
 		const user = getUser();
