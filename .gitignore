@@ -4,3 +4,13 @@ package-lock.json
 yarn.lock
 .svelte-kit
 yarn-error.log
+debug/
+target/
+Cargo.lock
+**/*.rs.bk
+*.pdb
+identity-key.pem
+identity.pem
+identity.pfx
+private.key
+certificate.crt

@@ -8,10 +8,14 @@
   "private": true,
   "scripts": {
     "start": "cd convineplace-frontend && npm run dev",
-    "backend": "cd backend && npm run start"
+    "build": "cd convineplace-frontend && npm run build",
+    "prod": "cd convineplace-frontend && PORT=3002 node build",
+    "backend": "cd backend && cargo run",
+    "deploy": "git pull && cd convineplace-frontend && npm run build && PORT=3002 node build"
   },
   "workspaces": [
-    "convineplace-frontend"
+    "convineplace-frontend",
+    "backend"
   ],
   "devDependencies": {}
 }
